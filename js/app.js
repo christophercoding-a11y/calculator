@@ -22,12 +22,26 @@ class Calculator {
     appendNumber(number) {
         if (number === '.' && this.currOperand.includes('.')) return
         this.currOperand = this.currOperand.toString() + number.toString()
-        // console.log(number, this.currOperand)
+        console.log(this.currOperand)
     }
 
-    // 2 clear
+    // 8 chooseOperation
+    // if there is no number the operation buttons are disabled
+    chooseOperation(operation) {
+        if (this.currOperand === '') return
+        if (this.prevOperand !== '') {
+            this.compute()
+        }
+
+        this.operation = operation
+        // pass this.currOperand to this.prevOperand
+        this.prevOperand = this.currOperand
+        this.currOperand = ''
+    }
+
+    // 9 clear
     clear() {
-        this.prevOperend = ''
+        this.prevOperand = ''
         this.currOperand = ''
         this.operation = undefined
     }
@@ -36,7 +50,7 @@ class Calculator {
     compute() {
         let computation
 
-        const prev = parseFloat(this.prevOperend)
+        const prev = parseFloat(this.prevOperand)
         const current = parseFloat(this.currOperand)
 
         if (isNaN(prev) || isNaN(current)) return
@@ -57,15 +71,22 @@ class Calculator {
             default:
                 return
         }
-        this.currOperand = computation 
+
+        // this.currOperand = computation
+        this.currOperand = isFinite(computation) ?
+        computation : "ERROR"
         this.operation = undefined
         this.prevOperand = ''
 
     }
 
-    // 3 delete
+    // 1 delete
     delete() {
-        this.currOperand = this.currOperand.toString().slice(0, -1)
+        if (this.currOperand == 'ERROR') {
+            this.currOperand = ''
+        } else {
+            this.currOperand = this.currOperand.toString().slice(0, -1)
+        }
     }
 
     // 6 getDisplayNumber
@@ -82,14 +103,16 @@ class Calculator {
         } else {
             integerDisplay = integerDigits.toLocaleString('en', {maximumFractionDigits: 0})
         }
+
+        return decimalDigits
     }
 
     // 5 updateDisplay
     updateDisplay() {
-        this.currOperText.innerText = this.getDisplay(this.currOperand)
+        this.currOperText.innerText = this.getDisplayNumber(this.currOperand)
 
         if (this.operation != null) {
-            this.prevOperText.innerText = `${this.getDisplayNumber(this.prevOperend)} ${this.operation}`
+            this.prevOperText.innerText = `${this.getDisplayNumber(this.prevOperand)} ${this.operation}`
         } else {
             this.prevOperText.innerText = ''
         }
@@ -113,28 +136,37 @@ const calculator = new Calculator(prevOperText, currOperText)
 // 3 addEventListener to buttons
 numBtn.forEach (button => {
     button.addEventListener('click', ()=> {
-        console.log(button.innerText)
+        // console.log(button.innerText)
         calculator.appendNumber(button.innerText)
+        calculator.updateDisplay()
     })
 })
 
 
-operBtn.forEach (button => {
+operBtn.forEach(button => {
     button.addEventListener('click', ()=> {
-        console.log(button.innerText)
+        // console.log(button.innerText)
+        calculator.chooseOperation(button.innerText)
+        calculator.updateDisplay()
     })
 })
 
 equalBtn.addEventListener('click', ()=> {
-    console.log(equalBtn.innerText)
+    // console.log(equalBtn.innerText)
+    calculator.compute()
+    calculator.updateDisplay()
 })
 
 allClearBtn.addEventListener('click', ()=> {
-    console.log(allClearBtn.innerText)
+    // console.log(allClearBtn.innerText)
+    calculator.clear()
+    calculator.updateDisplay()
 })
 
 delBtn.addEventListener('click', ()=> {
-    console.log(delBtn.innerText)
+    // console.log(delBtn.innerText)
+    calculator.delete()
+    calculator.updateDisplay()
 })
 
 

@@ -49,14 +49,14 @@ h1 {
 }
 
 .curr-operand {
-    color:var(--tert);
+    color:var(--sec);
     font-size: 2rem;
 }
 
 
 .header {
     padding: 10px 0;
-    background-color: #ff0000;
+    background-color: var(--prim);
     border-bottom: 3px solid var(--tert);
 }
 
@@ -74,12 +74,12 @@ h1 {
     height: 70px;
     word-wrap: break-word;
     word-wrap: break-all;
-    background-color: #FFFFFF;
+    background-color: #000;
     opacity: 0.75;
 }
 
 .prev-operand {
-    color: var(--tert);
+    color: var(--prim);
     font-size: 1.5rem;
 }
 
